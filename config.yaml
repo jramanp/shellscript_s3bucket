@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Creates step function state machine 
+
+Parameters:
+  definitionString:
+    Type: String
+    Description: The definition string
+  cloudWatchLogGroupArn:
+    Type: String
+    Description: Log group ARN
+  includeExecutionData:
+    Type: String
+    AllowedValues:
+      - "True"
+      - "False"
+    Description: Include the execution data in the logs
+  level:
+    Type: String
+    Description: Log level
+  stepFunctionRoleArn:
+    Type: String
+    Description: Role for the step function as an ARN
+  stateMachineName:
+    Type: String
+    Description: Name of the step function
+  stateMachineType:
+    Type: String
+    AllowedValues:
+      - "STANDARD"
+      - "EXPRESS"
+    Description: Type of state machine
+  lambdaArn: 
+    Type: String
+    Description: Arn for the lambda
+
+Resources:
+  stateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      DefinitionString: !Sub | 
+        {
+          "Comment": "A Hello World example using an AWS Lambda function",
+          "StartAt": "HelloWorld",
+          "States": {
+            "HelloWorld": {
+              "Type": "Task",
+              "Resource": "${lambdaArn}",
+              "End": true
+            }
+          }
+        }
+        - {lambdaArn: !Ref lambdaArn}    
+      LoggingConfiguration:
+        Destinations:
+          - CloudWatchLogsLogGroup: 
+              LogGroupArn: !Ref cloudWatchLogGroupArn
+        IncludeExecutionData: !Ref includeExecutionData
+        Level: !Ref level
+      RoleArn: !Ref stepFunctionRoleArn
+      StateMachineName: !Ref stateMachineName
+      StateMachineType: !Ref stateMachineType  
+
+
