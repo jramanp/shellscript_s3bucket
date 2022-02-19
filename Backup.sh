@@ -11,5 +11,5 @@ fi
 
 #upload Zip file to S3 bucket 
 echo "Coping the file S3 Bucket"
-aws s3 cp config.zip s3://ct-ctr-deployments-at12/success/
+aws s3 cp ./config.zip s3://ct-ctr-deployments-at12/success/
 echo "Zip file has been uploaded to S3 Bucket"
