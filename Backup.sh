@@ -1,6 +1,6 @@
 #!/bin/bash
 # Check if the file is exist or not, if file is exist then zip "config.zip"
-File=config1.yaml
+File=config.yaml
 if [ -f "$File" ];
 then
 zip config.zip $File
